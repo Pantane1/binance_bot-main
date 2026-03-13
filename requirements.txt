@@ -1,0 +1,48 @@
+# Core dependencies
+setuptools>=65.5.0  # Required for distutils compatibility in Python 3.12+
+python-binance==1.0.19
+pandas>=2.1.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+xgboost>=2.0.0
+lightgbm>=4.1.0
+catboost>=1.2.0
+
+# Deep Learning (OPTIONAL - required for LSTM model)
+# Uncomment these if you plan to use LSTM models
+# tensorflow>=2.16.0  # Latest: 2.20.0 (large package, ~500MB)
+# torch>=2.4.0  # Latest: 2.9.1 (large package, ~1GB+)
+
+# Hyperparameter tuning
+optuna>=3.0.0
+
+# Data collection
+tweepy==4.14.0
+requests==2.31.0
+beautifulsoup4==4.12.2
+feedparser==6.0.10
+newspaper3k==0.2.8  # Note: May have issues on Python 3.12, consider alternative if problems occur
+lxml_html_clean>=0.1.0  # Required for newspaper3k
+praw==7.7.1  # Reddit API
+
+# Sentiment analysis
+textblob==0.17.1
+
+# Technical analysis
+ta==0.11.0
+
+# Utilities
+python-dotenv==1.0.0
+pyyaml==6.0.1
+schedule==1.2.0
+tqdm==4.66.1
+
+# Data storage
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9  # PostgreSQL adapter (optional, only needed if using PostgreSQL)
+
+# Visualization (optional)
+matplotlib==3.8.2
+seaborn==0.13.0
+plotly==5.18.0
+

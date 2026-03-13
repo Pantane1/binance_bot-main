@@ -1,0 +1,13 @@
+# Optional Deep Learning Dependencies
+# Install these only if you plan to implement LSTM/Transformer models
+# Note: These are large packages (several GB combined)
+
+# TensorFlow (for Keras-based models)
+tensorflow>=2.16.0  # Latest: 2.20.0
+
+# PyTorch (for PyTorch-based models)
+torch>=2.4.0  # Latest: 2.9.1
+
+# To install optional dependencies:
+# pip install -r requirements-optional.txt
+
