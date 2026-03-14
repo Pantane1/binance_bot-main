@@ -1,0 +1,208 @@
+# Trading AI Configuration
+
+# Binance API Configuration
+binance:
+  api_key: ""      # Prefer BINANCE_API_KEY in .env
+  api_secret: ""   # Prefer BINANCE_API_SECRET in .env
+  testnet: true  # Use testnet for testing
+  futures_testnet: true
+
+# Trading Configuration
+trading:
+  mode: "futures"  # Options: "spot", "futures", "both"
+  symbols:
+    # Core majors (high liquidity, proven track record)
+    - "BTCUSDT"     # Bitcoin - highest liquidity, most stable
+    - "ETHUSDT"     # Ethereum - strong fundamentals
+    - "BNBUSDT"     # Binance Coin - exchange token, good volume
+    - "SOLUSDT"     # Solana - high performance, active ecosystem
+    - "XRPUSDT"     # Ripple - regulatory clarity, institutional interest
+    - "ADAUSDT"     # Cardano - strong development, growing adoption
+    - "DOGEUSDT"    # Dogecoin - high volatility, good for trading
+    - "LINKUSDT"    # Chainlink - oracle leader, strong fundamentals
+    - "AVAXUSDT"    # Avalanche - fast, low fees, growing ecosystem
+    # High-potential altcoins (good liquidity, strong narratives)
+    - "MATICUSDT"   # Polygon - Layer 2 scaling, strong adoption
+    - "DOTUSDT"     # Polkadot - interoperability, parachain ecosystem
+    - "ATOMUSDT"    # Cosmos - IBC ecosystem, growing network
+    - "UNIUSDT"     # Uniswap - DEX leader, strong fundamentals
+    - "AAVEUSDT"    # Aave - DeFi lending leader
+    - "OPUSDT"      # Optimism - Ethereum L2, growing TVL
+    - "ARBUSDT"     # Arbitrum - Ethereum L2, high activity
+    - "INJUSDT"     # Injective - DeFi derivatives, strong growth
+    - "TIAUSDT"     # Celestia - modular blockchain, emerging narrative
+    - "SEIUSDT"     # Sei - high-performance L1, growing ecosystem
+  base_currency: "USDT"
+  
+  # Multi-position trading
+  max_positions_per_symbol: 3   # Allow up to 3 concurrent positions per symbol/direction (more focused)
+  allow_reentry_after_scaling: true  # Allow new entries after scaling out positions (captures continuation moves)
+  min_profit_before_reentry: 0.02  # Require 2% profit before allowing re-entry (prevents over-trading)
+  
+  # Concurrent processing
+  max_concurrent_symbols: 15  # Process more symbols concurrently (expands opportunity set)
+  max_total_positions: 20  # Maximum total positions across all symbols (risk control)
+  
+  # Risk Management - Professional Best Practices
+  risk:
+    # Conservative position sizing for long-term profitability
+    max_position_size: 0.05      # 5% of portfolio per trade (professional standard, reduces risk)
+    risk_per_trade: 0.015        # Risk 1.5% of equity per trade (professional standard, sustainable)
+    risk_reward_ratio: 0.5       # 1:2 risk to reward (4% SL, 8% TP - professional minimum)
+    max_daily_loss: 0.05         # 5% max daily loss (stops drawdowns, allows recovery)
+    stop_loss_pct: 0.04          # 4% stop loss (wider to avoid noise, standard for crypto volatility)
+    take_profit_pct: 0.08        # 8% take profit (2R target, lets winners run for long-term gains)
+    liquidation_buffer: 0.15     # 15% buffer above liquidation price (safer for futures)
+    max_leverage: 5              # Up to 5x leverage (more conservative, reduces liquidation risk)
+    
+    # Professional partial profit taking strategy - Let winners run
+    # With 4% SL, R = 4%, so TP at 8% = 2R
+    # Strategy: Lock in profits progressively while letting winners run
+    partial_take_profits:
+      - { fraction: 0.25, rr_multiple: 1.0 }  # Take 25% at 1R (4% profit - breakeven + profit secured)
+      - { fraction: 0.25, rr_multiple: 1.5 }  # Take 25% at 1.5R (6% profit - good profit locked)
+      - { fraction: 0.25, rr_multiple: 2.0 }  # Take 25% at 2R (8% profit - target reached)
+      - { fraction: 0.25, rr_multiple: 3.0 }  # Let remaining 25% run to 3R (12% profit - maximum gains)
+    # Total: 100% scaled out, but at higher R multiples for better profitability
+    
+    # Trailing stop - Protect winners without premature exits
+    trailing_stop:
+      enabled: true
+      activate_rr: 1.0            # Start trailing at 1R profit (4% - after first TP taken)
+      trail_pct: 0.015            # Trail 1.5% behind peak (gives room for volatility, avoids premature exits)
+  
+  # Position Sizing - Risk-based professional approach
+  position_sizing:
+    method: "volatility"  # Use volatility-based sizing (adjusts for market conditions)
+    base_size: 0.05  # 5% base position size (conservative, professional standard)
+    volatility_factor: 0.85  # Reduce size by 15% for highly volatile assets (risk management)
+    min_position_size: 0.01  # Minimum 1% position size (ensures meaningful trades)
+    max_position_size: 0.05  # Maximum 5% position size (hard cap for risk control)
+
+# Data Collection
+data_collection:
+  # Market Data
+  market_data:
+    intervals: ["1m", "5m", "15m", "1h", "4h", "1d"]
+    lookback_periods: 100  # More data for better model training and pattern recognition
+    update_frequency: 300  # 5 minutes (reduces overtrading, focuses on quality signals)
+  
+  # Social Media
+  social_media:
+    twitter:
+      enabled: true
+      api_key: ""  # Set via environment variable
+      api_secret: ""  # Set via environment variable
+      access_token: ""  # Set via environment variable
+      access_token_secret: ""  # Set via environment variable
+      search_terms: ["BTC", "ETH", "crypto", "bitcoin", "ethereum"]
+      max_tweets: 100
+    
+    reddit:
+      enabled: true
+      subreddits: ["cryptocurrency", "bitcoin", "ethereum", "CryptoMarkets"]
+      max_posts: 50
+  
+  # News
+  news:
+    enabled: true
+    sources:
+      - "coindesk"
+      - "cointelegraph"
+      - "cryptonews"
+    update_frequency: 3600  # 1 hour
+    max_articles: 50
+  
+  # Wallet Analysis
+  wallet_analysis:
+    enabled: true
+    top_wallets_count: 100
+    update_frequency: 3600  # 1 hour
+    blockchain_explorers:
+      btc: "blockchain.info"
+      eth: "etherscan.io"
+
+# Feature Engineering
+feature_engineering:
+  technical_indicators:
+    - "RSI"
+    - "MACD"
+    - "BB"
+    - "EMA"
+    - "SMA"
+    - "ADX"
+    - "ATR"
+    - "OBV"
+    - "Stochastic"
+    - "CCI"
+  
+  market_features:
+    - "volume_profile"
+    - "order_book_imbalance"
+    - "funding_rate"
+    - "open_interest"
+    - "liquidation_levels"
+  
+  sentiment_features:
+    - "twitter_sentiment"
+    - "reddit_sentiment"
+    - "news_sentiment"
+    - "fear_greed_index"
+  
+  wallet_features:
+    - "whale_movements"
+    - "exchange_flows"
+    - "accumulation_score"
+
+# Model Configuration
+models:
+  # Model Selection
+  selection_method: "ensemble"  # Options: "best_single", "ensemble", "stacking"
+  retrain_frequency: 86400  # 24 hours in seconds
+  
+  # Feature Selection
+  use_feature_selection: true  # Enable advanced feature selection
+  feature_selection_method: "combined"  # Options: "mutual_info", "correlation", "importance", "combined"
+  
+  # Models to train
+  models_to_train:
+    # - "xgboost"
+    - "lightgbm"
+    - "catboost"
+    - "random_forest"
+    - "gradient_boosting"
+    - "lstm"  # Optional deep learning (requires TensorFlow)
+  
+  # Hyperparameter tuning
+  hyperparameter_tuning:
+    enabled: true
+    method: "optuna"  # Options: "grid_search", "random_search", "optuna"
+    n_trials: 100  # Increased from 50 for better hyperparameter optimization
+  
+  # Validation
+  validation:
+    train_test_split: 0.8
+    time_series_split: true
+    n_splits: 5
+
+# Prediction
+prediction:
+  prediction_horizon: "4h"  # Predict price movement in 4 hours (good for swing trading)
+  confidence_threshold: 0.75  # 75% minimum confidence (balanced - selective but not too restrictive)
+  ensemble_weight_method: "performance"  # Weight by validation performance
+  min_prediction_strength: 0.02  # Minimum 2% predicted move to enter (filters weak signals)
+
+# Logging
+logging:
+  level: "INFO"
+  file: "logs/trading_ai.log"
+  console: true
+
+# Database (supports both SQLite and PostgreSQL)
+database:
+  type: "sqlite"  # Options: "sqlite" or "postgres"
+  path: "data/trading_data.db"  # For SQLite only
+  # For PostgreSQL, uncomment and configure:
+  # type: "postgres"
+  # url: "postgresql+psycopg2://user:password@localhost:5432/trading_ai"
+
